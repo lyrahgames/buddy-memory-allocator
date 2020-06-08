@@ -1,0 +1,7 @@
+project = buddy-memory-allocator
+
+using version
+using config
+using test
+using install
+using dist
