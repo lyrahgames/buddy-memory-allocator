@@ -5,7 +5,7 @@
 using namespace std;
 
 int main() {
-  buddy_memory_allocator system{2048};
+  buddy_memory_allocator system{1ull << 31};  // 2 GiB
   cout << "initial\n" << system << '\n';
 
   // auto p1 = system.allocate(8);
