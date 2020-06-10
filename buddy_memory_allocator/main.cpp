@@ -5,7 +5,7 @@
 using namespace std;
 
 int main() {
-  buddy_memory_allocator system{1ull << 31};  // 2 GiB
+  buddy_memory_allocator system{size_t{1} << 32};  // 4 GiB
   cout << "initial\n" << system << '\n';
 
   // auto p1 = system.allocate(8);
@@ -37,4 +37,9 @@ int main() {
   // system.deallocate(p3, 8);
   system.free(p3);
   cout << "free(p3 {" << p3 << "}):\n" << system << '\n';
+
+  cout << "sizeof(size_t) = " << sizeof(size_t) << '\n'
+       << "sizeof(ptrdiff_t) = " << sizeof(ptrdiff_t) << '\n'
+       << "sizeof(intptr_t) = " << sizeof(intptr_t) << '\n'
+       << "sizeof(uintptr_t) = " << sizeof(uintptr_t) << '\n';
 }

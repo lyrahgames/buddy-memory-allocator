@@ -21,6 +21,12 @@ inline uint32_t log2(const uint32_t x) {
   return y;
 }
 
+inline uint64_t log2(uint64_t x) noexcept {
+  uint64_t y;
+  asm("\tbsr %1, %0\n" : "=r"(y) : "r"(x));
+  return y;
+}
+
 inline uint32_t next_pow2(uint32_t x) {
   return uint32_t{1} << (log2(x - 1) + 1);
 }

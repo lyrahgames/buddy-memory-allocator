@@ -68,7 +68,7 @@ buddy_memory_allocator::buddy_memory_allocator(size_t s) {
   // Managed memory needs to have its size to be equal to a power of two.
   // This size will then be the maximal page size.
   max_page_size_exp = next_size_exp(s);
-  const auto size = 1ull << max_page_size_exp;
+  const auto size = size_t{1} << max_page_size_exp;
 
   // Allocate aligned system memory on the heap to be managed.
   memory_size = size + page_alignment;
@@ -90,7 +90,6 @@ buddy_memory_allocator::~buddy_memory_allocator() { delete[] memory; }
 inline void* buddy_memory_allocator::malloc(size_t size) noexcept {
   // We do not support allocating memory with size zero.
   if (!size) return nullptr;
-
   // Compute the actual size of the page by calculating the next power of two
   // bucket.
   const auto page_size_exp = next_size_exp(size + page_header_size);
@@ -109,7 +108,7 @@ inline void* buddy_memory_allocator::malloc(size_t size) noexcept {
         // address. We need to take care of pointer arithmetic because we are
         // counting bytes.
         free_pages[i] =
-            result + ((1 << (min_page_size_exp + i)) / sizeof(node*));
+            result + ((size_t{1} << (min_page_size_exp + i)) / sizeof(node*));
         // We know that the list was previously empty.
         free_pages[i]->next = nullptr;
       }
@@ -138,7 +137,7 @@ inline void buddy_memory_allocator::free(void* address) noexcept {
   // Check if page was returned by buddy allocation.
   if (index < 0 || index > free_pages.size() ||
       ((page - base) * sizeof(node*) &
-       ((1ull << (index + min_page_size_exp)) - 1)))
+       ((size_t{1} << (index + min_page_size_exp)) - 1)))
     return;
   // We assume that we are the only ones that can write into unreserved memory.
   // So we only have to check if a given page is already a free page.
