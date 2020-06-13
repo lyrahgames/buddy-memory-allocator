@@ -1,6 +1,8 @@
 libs =
 #import libs += libhello%lib{hello}
 
-exe{buddy-memory-allocator}: {hxx ixx txx cxx}{**} $libs
+./: exe{buddy-memory-allocator}: hxx{**} cxx{main}
+
+./: exe{test}: hxx{**} cxx{test}
 
 cxx.poptions =+ "-I$out_root" "-I$src_root"

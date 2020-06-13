@@ -40,6 +40,9 @@ class buddy_memory_allocator {
   auto index_of_node_ptr(node* ptr) const noexcept {
     return (ptr - base) * sizeof(node*);
   }
+  auto index_of_node_ptr(void* ptr) const noexcept {
+    return index_of_node_ptr(reinterpret_cast<node*>(ptr));
+  }
   auto node_ptr_of_index(intptr_t index) const noexcept {
     return base + index / sizeof(node*);
   }
@@ -149,8 +152,7 @@ inline void buddy_memory_allocator::free(void* address) noexcept {
 
   for (;; ++index) {
     // Construct mask and test numbers to test if two pages are buddies.
-    const auto is_buddy_mask =
-        ~(static_cast<intptr_t>(1) << (index + min_page_size_exp));
+    const auto is_buddy_mask = ~(size_t{1} << (index + min_page_size_exp));
     const auto buddy_test = ((new_buddy - base) * sizeof(node)) & is_buddy_mask;
 
     // Go trough the list of pages with this size and look for the possible
@@ -230,7 +232,7 @@ inline std::ostream& operator<<(std::ostream& os,
     os << setw(4) << "2^" << setw(2) << i << " B = " << setw(10) << (1ull << i)
        << " B :";
     for (auto it = bs.free_pages[i - bs.min_page_size_exp]; it; it = it->next)
-      os << setw(5) << "-->" << setw(10)
+      os << setw(5) << "-->" << setw(12)
          << (it - bs.base) * sizeof(bs.free_pages[0]) << " (" << it << ")";
     os << '\n';
   }
