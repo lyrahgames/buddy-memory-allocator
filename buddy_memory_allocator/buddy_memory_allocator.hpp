@@ -290,3 +290,25 @@ inline std::ostream& operator<<(std::ostream& os,
   }
   return os << setfill('-') << setw(80) << '\n' << setfill(' ');
 }
+
+inline void* operator new(size_t size, buddy_memory_allocator& allocator) {
+  const auto result = allocator.malloc(size);
+  if (!result) throw std::bad_alloc{};
+  return result;
+}
+
+inline void* operator new[](size_t size, buddy_memory_allocator& allocator) {
+  const auto result = allocator.malloc(size);
+  if (!result) throw std::bad_alloc{};
+  return result;
+}
+
+inline void operator delete(void* ptr,
+                            buddy_memory_allocator& allocator) noexcept {
+  allocator.free(ptr);
+}
+
+inline void operator delete[](void* ptr,
+                              buddy_memory_allocator& allocator) noexcept {
+  allocator.free(ptr);
+}

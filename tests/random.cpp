@@ -12,8 +12,8 @@ int main() {
 
   unordered_set<void*> pointer_to_allocations{};
 
-  buddy_memory_allocator system{size_t{1} << 32};  // 4 GiB
-  cout << "initial\n" << system << '\n';
+  buddy_memory_allocator allocator{size_t{1} << 32};  // 4 GiB
+  cout << "initial\n" << allocator << '\n';
 
   std::string s;
   while (std::getline(std::cin, s)) {
@@ -25,14 +25,14 @@ int main() {
 
       cout << "allocate " << mem_size << " B:\n";
 
-      const auto p = system.malloc(mem_size);
+      const auto p = allocator.malloc(mem_size);
       if (!p) {
         cout << "unsuccessful\n";
       } else {
         pointer_to_allocations.insert(p);
-        cout << "success: p = " << system.index_of_node_ptr(p) << " (" << p
+        cout << "success: p = " << allocator.index_of_node_ptr(p) << " (" << p
              << ")" << '\n'
-             << "page size = " << system.page_size(p) << '\n'
+             << "page size = " << allocator.page_size(p) << '\n'
              << "alignment = " << alignment_of_ptr(p) << '\n';
       }
     } else {
@@ -43,13 +43,13 @@ int main() {
       auto it = pointer_to_allocations.begin();
       advance(it, index);
 
-      cout << "deallocate " << system.index_of_node_ptr(*it) << " (" << *it
+      cout << "deallocate " << allocator.index_of_node_ptr(*it) << " (" << *it
            << ")" << '\n';
 
-      system.free(*it);
+      allocator.free(*it);
       pointer_to_allocations.erase(it);
     }
 
-    cout << system;
+    cout << allocator;
   }
 }
