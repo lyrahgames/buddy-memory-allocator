@@ -43,6 +43,7 @@ class buddy_memory_allocator {
   }
   size_t reserved_memory_size() const noexcept { return memory_size; }
   size_t available_memory_size() const noexcept;
+  size_t max_available_page_size() const noexcept;
   auto index_of_node_ptr(node* ptr) const noexcept {
     return (ptr - base) * sizeof(node*);
   }
@@ -197,6 +198,12 @@ inline size_t buddy_memory_allocator::available_memory_size() const noexcept {
   return result;
 }
 
+inline size_t buddy_memory_allocator::max_available_page_size() const noexcept {
+  for (auto i = free_pages.size(); i > 0; --i)
+    if (free_pages[i - 1]) return size_t{1} << (i - 1 + min_page_size_exp);
+  return 0;
+}
+
 inline std::ostream& operator<<(std::ostream& os,
                                 const buddy_memory_allocator& bs) {
   using namespace std;
@@ -209,23 +216,24 @@ inline std::ostream& operator<<(std::ostream& os,
      << "size of buddy memory   = " << setw(20) << bs.memory_size << " B"
      << '\n'
      << "alignment buddy memory = " << setw(20) << alignment_of_ptr(bs.memory)
-     << " B" << '\n'
+     << " B"
      << '\n'
+     // << '\n'
      << "base pointer offset    = " << setw(20) << bs.base << '\n'
      << "managed memory size    = " << setw(20) << bs.managed_memory_size()
      << " B" << '\n'
      << "alignment base pointer = " << setw(20) << alignment_of_ptr(bs.base)
      << " B" << '\n'
      << '\n'
-     << "unused memory offset   = " << setw(20)
-     << decltype(bs.memory)(bs.base) - bs.memory << " B" << '\n'
-     << "unused memory end      = " << setw(20)
-     << (bs.memory + bs.memory_size) -
-            (decltype(bs.memory)(bs.base) + bs.managed_memory_size())
-     << " B" << '\n'
-     << "unused memory          = " << setw(20)
-     << bs.memory_size - bs.managed_memory_size() << " B" << '\n'
-     << '\n'
+     // << "unused memory offset   = " << setw(20)
+     // << decltype(bs.memory)(bs.base) - bs.memory << " B" << '\n'
+     // << "unused memory end      = " << setw(20)
+     // << (bs.memory + bs.memory_size) -
+     //        (decltype(bs.memory)(bs.base) + bs.managed_memory_size())
+     // << " B" << '\n'
+     // << "unused memory          = " << setw(20)
+     // << bs.memory_size - bs.managed_memory_size() << " B" << '\n'
+     // << '\n'
      << "page header size       = " << setw(20) << bs.page_header_size << " B"
      << '\n'
      << "page alignment         = " << setw(20) << bs.page_alignment << " B"
@@ -241,6 +249,8 @@ inline std::ostream& operator<<(std::ostream& os,
      << "free pages lists memory= " << setw(20)
      << bs.free_pages.size() * sizeof(bs.free_pages[0]) << " B" << '\n'
      << "available memory size  = " << setw(20) << bs.available_memory_size()
+     << " B" << '\n'
+     << "max available page size= " << setw(20) << bs.max_available_page_size()
      << " B" << '\n'
      << '\n'
      << "free pages lists content:" << '\n';
