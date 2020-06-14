@@ -33,10 +33,16 @@ class buddy_memory_allocator {
   size_t max_page_size() const noexcept {
     return size_t{1} << max_page_size_exp;
   }
+  size_t page_size(void* ptr) const noexcept {
+    return size_t{1} << (reinterpret_cast<size_t>(
+                             (reinterpret_cast<node*>(ptr) - 1)->next) +
+                         min_page_size_exp);
+  }
   size_t managed_memory_size() const noexcept {
     return size_t{1} << max_page_size_exp;
   }
   size_t reserved_memory_size() const noexcept { return memory_size; }
+  size_t available_memory_size() const noexcept;
   auto index_of_node_ptr(node* ptr) const noexcept {
     return (ptr - base) * sizeof(node*);
   }
@@ -182,6 +188,15 @@ inline void buddy_memory_allocator::free(void* address) noexcept {
   }
 }
 
+inline size_t buddy_memory_allocator::available_memory_size() const noexcept {
+  size_t result{};
+  for (size_t i = 0; i < free_pages.size(); ++i) {
+    for (auto it = free_pages[i]; it; it = it->next)
+      result += (size_t{1} << (i + min_page_size_exp));
+  }
+  return result;
+}
+
 inline std::ostream& operator<<(std::ostream& os,
                                 const buddy_memory_allocator& bs) {
   using namespace std;
@@ -225,6 +240,8 @@ inline std::ostream& operator<<(std::ostream& os,
      << "free pages lists size  = " << setw(20) << bs.free_pages.size() << '\n'
      << "free pages lists memory= " << setw(20)
      << bs.free_pages.size() * sizeof(bs.free_pages[0]) << " B" << '\n'
+     << "available memory size  = " << setw(20) << bs.available_memory_size()
+     << " B" << '\n'
      << '\n'
      << "free pages lists content:" << '\n';
 

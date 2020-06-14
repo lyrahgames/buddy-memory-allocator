@@ -32,6 +32,7 @@ int main() {
         pointer_to_allocations.insert(p);
         cout << "success: p = " << system.index_of_node_ptr(p) << " (" << p
              << ")" << '\n'
+             << "page size = " << system.page_size(p) << '\n'
              << "alignment = " << alignment_of_ptr(p) << '\n';
       }
     } else {
@@ -49,6 +50,6 @@ int main() {
       pointer_to_allocations.erase(it);
     }
 
-    cout << system << '\n';
+    cout << system;
   }
 }
