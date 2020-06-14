@@ -1,0 +1,7 @@
+$out_root/
+{
+  # include buddy_memory_allocator/
+  include ./
+}
+
+export $out_root/buddy_memory_allocator/$import.target

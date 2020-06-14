@@ -3,14 +3,17 @@
 
 !*.hpp
 !*.cpp
+!*.in
 
 !buildfile
 !bootstrap.build
 !root.build
+!export.build
 
 !manifest
 !repositories.manifest
 
 !README.md
+!LICENSE
 
 !.gitignore
