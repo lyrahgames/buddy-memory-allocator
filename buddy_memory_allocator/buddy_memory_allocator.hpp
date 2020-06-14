@@ -56,6 +56,7 @@ class buddy_memory_allocator {
   auto next_size_exp(size_t size) const noexcept {
     return std::max(min_page_size_exp, size_t(log2(size - 1) + 1));
   }
+  bool is_valid(void* ptr) const noexcept;
 
   friend std::ostream& operator<<(std::ostream&, const buddy_memory_allocator&);
 
@@ -135,32 +136,56 @@ inline void* buddy_memory_allocator::malloc(size_t size) noexcept {
   return nullptr;
 }
 
+inline bool buddy_memory_allocator::is_valid(void* ptr) const noexcept {
+  if (!ptr) return false;
+  // Cast difference to unsigned integer to make bounds testing easier.
+  const auto page = reinterpret_cast<node*>(ptr) - 1;
+  const auto memory_index = static_cast<size_t>(page - base);
+  // The pointer should lie in the space of our allocated memory.
+  if (memory_index >= managed_memory_size()) return false;
+  // Now we can access memory without segmentation fault and are able to ask for
+  // the pages size. Again, we use an unsigned integer for easier bounds
+  // testing.
+  const auto index = reinterpret_cast<size_t>(page->next);
+  if (index >= free_pages.size()) return false;
+  // Address must provide the alignment of its page size.
+  if (memory_index & ((size_t{1} << (index + min_page_size_exp)) - size_t{1}))
+    return false;
+  // Check if the existing page is already a free page.
+  for (auto it = free_pages[index]; it; it = it->next)
+    if (it == page) return false;
+  return true;
+}
+
 inline void buddy_memory_allocator::free(void* address) noexcept {
+  // First, we have to check the validity of the given address.
+  // We assume that we are the only ones that can write into unreserved memory.
+
   // Do nothing with an empty address.
   if (!address) return;
-
-  // Transform pointer to whole page with header again.
+  // Cast difference to unsigned integer to make bounds testing easier.
   auto page = reinterpret_cast<node*>(address) - 1;
-  // Get the index from the header.
-  auto index = reinterpret_cast<intptr_t>(page->next);
-
-  // Check if page was returned by buddy allocation.
-  if (index < 0 || index > free_pages.size() ||
-      ((page - base) * sizeof(node*) &
-       ((size_t{1} << (index + min_page_size_exp)) - 1)))
+  const auto memory_index = index_of_node_ptr(page);
+  // The pointer should lie in the space of our allocated memory.
+  if (memory_index >= managed_memory_size()) return;
+  // Now we can access memory without segmentation fault and are able to ask for
+  // the pages size. Again, we use an unsigned integer for easier bounds
+  // testing.
+  auto index = reinterpret_cast<size_t>(page->next);
+  if (index >= free_pages.size()) return;
+  // Address must provide the alignment of its page size.
+  if (memory_index & ((size_t{1} << (index + min_page_size_exp)) - size_t{1}))
     return;
-  // We assume that we are the only ones that can write into unreserved memory.
-  // So we only have to check if a given page is already a free page.
+  // Check if the existing page is already a free page.
   for (auto it = free_pages[index]; it; it = it->next)
     if (it == page) return;
-  // At this point, we know the given address was allocated by the buddy system.
 
-  auto new_buddy = page;
+  // At this point, we know the given address was allocated by the buddy system.
 
   for (;; ++index) {
     // Construct mask and test numbers to test if two pages are buddies.
     const auto is_buddy_mask = ~(size_t{1} << (index + min_page_size_exp));
-    const auto buddy_test = ((new_buddy - base) * sizeof(node)) & is_buddy_mask;
+    const auto buddy_test = index_of_node_ptr(page) & is_buddy_mask;
 
     // Go trough the list of pages with this size and look for the possible
     // merge buddy.
@@ -176,14 +201,14 @@ inline void buddy_memory_allocator::free(void* address) noexcept {
     // If there is no buddy for merging, push the given page to the list.
     // At some point, this will always be true.
     if (buddy == nullptr) {
-      new_buddy->next = free_pages[index];
-      free_pages[index] = new_buddy;
+      page->next = free_pages[index];
+      free_pages[index] = page;
       return;
     }
     // Otherwise, we have found the buddy page and therefore have to pop and
     // merge it with our current page.
     prev->next = buddy->next;
-    new_buddy = base + buddy_test / sizeof(node);
+    page = base + buddy_test / sizeof(node);
     // We have to repeat these instructions to check if we have to do a merge
     // for the next higher page size.
   }

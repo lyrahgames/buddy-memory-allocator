@@ -8,23 +8,26 @@ int main() {
   buddy_memory_allocator system{size_t{1} << 10};  // 1 KiB
   cout << "initial\n" << system << '\n';
 
-  // auto p1 = system.allocate(8);
   auto p1 = system.malloc(223);
-  cout << "malloc(223): p1 = " << p1 << "\n"
+  cout << "malloc(223): p1 = " << system.index_of_node_ptr(p1) << " (" << p1
+       << ")"
+       << "\n"
        << "page size = " << system.page_size(p1) << " B" << '\n'
        << "alignment_of_ptr(p1) = " << alignment_of_ptr(p1) << '\n'
        << system << '\n';
 
-  // auto p2 = system.allocate(7);
   auto p2 = system.malloc(120);
-  cout << "malloc(120): p2 = " << p2 << "\n"
+  cout << "malloc(120): p2 = " << system.index_of_node_ptr(p2) << " (" << p2
+       << ")"
+       << "\n"
        << "page size = " << system.page_size(p2) << " B" << '\n'
        << "alignment_of_ptr(p2) = " << alignment_of_ptr(p2) << '\n'
        << system << '\n';
 
-  // auto p3 = system.allocate(8);
   auto p3 = system.malloc(128);
-  cout << "malloc(128): p3 = " << p3 << "\n"
+  cout << "malloc(128): p3 = " << system.index_of_node_ptr(p3) << " (" << p3
+       << ")"
+       << "\n"
        << "page size = " << system.page_size(p3) << " B" << '\n'
        << "alignment_of_ptr(p3) = " << alignment_of_ptr(p3) << '\n'
        << system << '\n';
