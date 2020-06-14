@@ -121,6 +121,21 @@ int main(){
 
 ## API
 
+### Constructor
+```c++
+    buddy_memory_allocator::buddy_memory_allocator(size_t s);
+```
+
+### Bare-Bones Allocation Member Function
+```c++
+    void* buddy_memory_allocator::malloc(size_t size) noexcept;
+```
+
+### Bare-Bones Deallocation Member Function
+```c++
+    void buddy_memory_allocator::free(void* address) noexcept;
+```
+
 ## Features
 
 - low memory consumption
