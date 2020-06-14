@@ -2,7 +2,7 @@
 name: buddy-memory-allocator
 version: 0.1.0-a.0.z
 summary: buddy-memory-allocator C++ executable
-license: proprietary
+license: MIT ; MIT License
 description-file: README.md
 url: https://github.com/lyrahgames/buddy-memory-allocator
 email: markus.pawellek@mailbox.org
