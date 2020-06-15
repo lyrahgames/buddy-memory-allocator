@@ -1,4 +1,4 @@
-import libs = buddy-memory-allocator%lib{buddy-memory-allocator}
+import libs = buddy-system%lib{buddy-system}
 
 ./: exe{example}: cxx{example} $libs
 ./: exe{random}: cxx{random} $libs

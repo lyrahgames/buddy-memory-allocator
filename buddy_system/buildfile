@@ -2,7 +2,7 @@ int_libs = # Interface dependencies.
 imp_libs = # Implementation dependencies.
 #import imp_libs += libhello%lib{hello}
 
-lib{buddy-memory-allocator}: {hxx ixx txx}{** -version} hxx{version} $imp_libs $int_libs
+lib{buddy-system}: {hxx ixx txx}{** -version} hxx{version} $imp_libs $int_libs
 
 # Include the generated version header into the distribution (so that we don't
 # pick up an installed one) and don't remove it when cleaning in src (so that
@@ -20,17 +20,17 @@ cxx.poptions =+ "-I$out_root" "-I$src_root"
 
 # Export options.
 #
-lib{buddy-memory-allocator}:
+lib{buddy-system}:
 {
   cxx.export.poptions = "-I$out_root" "-I$src_root"
   cxx.export.libs = $int_libs
 }
 
-# Install into the buddy-memory-allocator/ subdirectory of, say, /usr/include/
+# Install into the buddy-system/ subdirectory of, say, /usr/include/
 # recreating subdirectories.
 #
 {hxx ixx txx}{*}:
 {
-  install         = include/buddy_memory_allocator/
+  install         = include/buddy_system/
   install.subdirs = true
 }

@@ -1,4 +1,4 @@
-project = buddy-memory-allocator
+project = buddy-system
 
 using version
 using config

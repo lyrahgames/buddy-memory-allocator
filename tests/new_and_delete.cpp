@@ -1,4 +1,4 @@
-#include <buddy_memory_allocator/buddy_memory_allocator.hpp>
+#include <buddy_system/buddy_system.hpp>
 #include <iomanip>
 #include <iostream>
 #include <random>
@@ -15,7 +15,7 @@ struct test {
 int main() {
   mt19937 rng{random_device{}()};
 
-  buddy_memory_arena arena{size_t{1} << 12};
+  buddy_system::arena arena{size_t{1} << 12};
 
   string input{};
   while (getline(cin, input)) {

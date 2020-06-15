@@ -1,6 +1,6 @@
 #pragma once
 
-#include <buddy_memory_allocator/utility.hpp>
+#include <buddy_system/utility.hpp>
 #include <cstddef>
 #include <cstdint>
 #include <cstdlib>
@@ -11,18 +11,20 @@
 #include <utility>
 #include <vector>
 
-class buddy_memory_arena {
+namespace buddy_system {
+
+class arena {
   struct node {
     node* next{};
   };
 
  public:
-  explicit buddy_memory_arena(size_t);
-  ~buddy_memory_arena();
-  buddy_memory_arena(buddy_memory_arena&) = delete;
-  buddy_memory_arena& operator=(buddy_memory_arena&) = delete;
-  buddy_memory_arena(buddy_memory_arena&&) = delete;
-  buddy_memory_arena& operator=(buddy_memory_arena&&) = delete;
+  explicit arena(size_t);
+  ~arena();
+  arena(arena&) = delete;
+  arena& operator=(arena&) = delete;
+  arena(arena&&) = delete;
+  arena& operator=(arena&&) = delete;
 
   void* malloc(size_t size) noexcept;
   void free(void* address) noexcept;
@@ -65,7 +67,7 @@ class buddy_memory_arena {
   }
   bool is_valid(void* ptr) const noexcept;
 
-  friend std::ostream& operator<<(std::ostream&, const buddy_memory_arena&);
+  friend std::ostream& operator<<(std::ostream&, const arena&);
 
  private:
   static constexpr size_t page_header_size = alignof(node);
@@ -78,7 +80,7 @@ class buddy_memory_arena {
   std::byte* memory{};
 };
 
-buddy_memory_arena::buddy_memory_arena(size_t s) {
+arena::arena(size_t s) {
   // We do not support management of memory with size zero.
   if (!s) throw std::bad_alloc{};
 
@@ -103,9 +105,9 @@ buddy_memory_arena::buddy_memory_arena(size_t s) {
   free_pages.back()->next = nullptr;
 }
 
-buddy_memory_arena::~buddy_memory_arena() { delete[] memory; }
+arena::~arena() { delete[] memory; }
 
-inline void* buddy_memory_arena::malloc(size_t size) noexcept {
+inline void* arena::malloc(size_t size) noexcept {
   // We do not support allocating memory with size zero.
   if (!size) return nullptr;
   // Compute the actual size of the page by calculating the next power of two
@@ -143,7 +145,7 @@ inline void* buddy_memory_arena::malloc(size_t size) noexcept {
   return nullptr;
 }
 
-inline bool buddy_memory_arena::is_valid(void* ptr) const noexcept {
+inline bool arena::is_valid(void* ptr) const noexcept {
   if (!ptr) return false;
   // Cast difference to unsigned integer to make bounds testing easier.
   const auto page = reinterpret_cast<node*>(ptr) - 1;
@@ -164,7 +166,7 @@ inline bool buddy_memory_arena::is_valid(void* ptr) const noexcept {
   return true;
 }
 
-inline void buddy_memory_arena::free(void* address) noexcept {
+inline void arena::free(void* address) noexcept {
   // First, we have to check the validity of the given address.
   // We assume that we are the only ones that can write into unreserved memory.
 
@@ -221,7 +223,7 @@ inline void buddy_memory_arena::free(void* address) noexcept {
   }
 }
 
-inline size_t buddy_memory_arena::available_memory_size() const noexcept {
+inline size_t arena::available_memory_size() const noexcept {
   size_t result{};
   for (size_t i = 0; i < free_pages.size(); ++i) {
     for (auto it = free_pages[i]; it; it = it->next)
@@ -230,14 +232,13 @@ inline size_t buddy_memory_arena::available_memory_size() const noexcept {
   return result;
 }
 
-inline size_t buddy_memory_arena::max_available_page_size() const noexcept {
+inline size_t arena::max_available_page_size() const noexcept {
   for (auto i = free_pages.size(); i > 0; --i)
     if (free_pages[i - 1]) return size_t{1} << (i - 1 + min_page_size_exp);
   return 0;
 }
 
-inline std::ostream& operator<<(std::ostream& os,
-                                const buddy_memory_arena& bs) {
+inline std::ostream& operator<<(std::ostream& os, const arena& bs) {
   using namespace std;
 
   os << setfill('-') << setw(80) << '\n'
@@ -298,38 +299,4 @@ inline std::ostream& operator<<(std::ostream& os,
   return os << setfill('-') << setw(80) << '\n' << setfill(' ');
 }
 
-inline void* operator new(size_t size, buddy_memory_arena& arena) {
-  return arena.allocate(size);
-}
-
-inline void* operator new[](size_t size, buddy_memory_arena& arena) {
-  return arena.allocate(size);
-}
-
-inline void operator delete(void* ptr, buddy_memory_arena& arena) noexcept {
-  arena.free(ptr);
-}
-
-inline void operator delete[](void* ptr, buddy_memory_arena& arena) noexcept {
-  arena.free(ptr);
-}
-
-// The allocator will be used as a handle to the buddy memory arena.
-template <typename T>
-struct buddy_memory_allocator {
-  using value_type = T;
-
-  buddy_memory_allocator(buddy_memory_arena& a) noexcept : arena{a} {}
-  template <typename U>
-  buddy_memory_allocator(const buddy_memory_allocator<U>& other) noexcept
-      : arena{other.arena} {}
-
-  T* allocate(size_t n) {
-    return reinterpret_cast<T*>(arena.allocate(n * sizeof(T)));
-  }
-  void deallocate(T* ptr, size_t n) noexcept {
-    arena.deallocate(reinterpret_cast<void*>(ptr));
-  }
-
-  buddy_memory_arena& arena;
-};
+}  // namespace buddy_system

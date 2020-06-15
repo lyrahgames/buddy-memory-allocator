@@ -1,11 +1,11 @@
-#include <buddy_memory_allocator/buddy_memory_allocator.hpp>
+#include <buddy_system/buddy_system.hpp>
 #include <iomanip>
 #include <iostream>
 
 using namespace std;
 
 int main() {
-  buddy_memory_arena arena{size_t{1} << 10};  // 1 KiB
+  buddy_system::arena arena{size_t{1} << 10};  // 1 KiB
   cout << "initial\n" << arena << '\n';
 
   auto p1 = arena.malloc(223);
@@ -13,7 +13,8 @@ int main() {
        << ")"
        << "\n"
        << "page size = " << arena.page_size(p1) << " B" << '\n'
-       << "alignment_of_ptr(p1) = " << alignment_of_ptr(p1) << '\n'
+       << "alignment_of_ptr(p1) = " << buddy_system::alignment_of_ptr(p1)
+       << '\n'
        << arena << '\n';
 
   auto p2 = arena.malloc(120);
@@ -21,7 +22,8 @@ int main() {
        << ")"
        << "\n"
        << "page size = " << arena.page_size(p2) << " B" << '\n'
-       << "alignment_of_ptr(p2) = " << alignment_of_ptr(p2) << '\n'
+       << "alignment_of_ptr(p2) = " << buddy_system::alignment_of_ptr(p2)
+       << '\n'
        << arena << '\n';
 
   auto p3 = arena.malloc(128);
@@ -29,7 +31,8 @@ int main() {
        << ")"
        << "\n"
        << "page size = " << arena.page_size(p3) << " B" << '\n'
-       << "alignment_of_ptr(p3) = " << alignment_of_ptr(p3) << '\n'
+       << "alignment_of_ptr(p3) = " << buddy_system::alignment_of_ptr(p3)
+       << '\n'
        << arena << '\n';
 
   arena.free(p2);

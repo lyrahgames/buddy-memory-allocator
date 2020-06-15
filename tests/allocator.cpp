@@ -1,4 +1,4 @@
-#include <buddy_memory_allocator/buddy_memory_allocator.hpp>
+#include <buddy_system/buddy_system.hpp>
 #include <iomanip>
 #include <iostream>
 #include <list>
@@ -7,9 +7,9 @@
 using namespace std;
 
 template <typename T>
-using my_vector = vector<T, buddy_memory_allocator<T>>;
+using my_vector = vector<T, buddy_system::allocator<T>>;
 template <typename T>
-using my_list = list<T, buddy_memory_allocator<T>>;
+using my_list = list<T, buddy_system::allocator<T>>;
 
 template <typename T>
 ostream& operator<<(ostream& os, const my_vector<T>& v) {
@@ -24,7 +24,7 @@ ostream& operator<<(ostream& os, const my_list<T>& v) {
 }
 
 int main() {
-  buddy_memory_arena arena{size_t{1} << 12};  // 4096 B
+  buddy_system::arena arena{size_t{1} << 12};  // 4096 B
   cout << arena;
 
   string input{};

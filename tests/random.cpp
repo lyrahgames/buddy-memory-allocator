@@ -1,4 +1,4 @@
-#include <buddy_memory_allocator/buddy_memory_allocator.hpp>
+#include <buddy_system/buddy_system.hpp>
 #include <iomanip>
 #include <iostream>
 #include <random>
@@ -12,7 +12,7 @@ int main() {
 
   unordered_set<void*> pointer_to_allocations{};
 
-  buddy_memory_arena arena{size_t{1} << 32};  // 4 GiB
+  buddy_system::arena arena{size_t{1} << 32};  // 4 GiB
   cout << "initial\n" << arena << '\n';
 
   std::string s;
@@ -33,7 +33,7 @@ int main() {
         cout << "success: p = " << arena.index_of_node_ptr(p) << " (" << p
              << ")" << '\n'
              << "page size = " << arena.page_size(p) << '\n'
-             << "alignment = " << alignment_of_ptr(p) << '\n';
+             << "alignment = " << buddy_system::alignment_of_ptr(p) << '\n';
       }
     } else {
       uniform_int_distribution<size_t> pointer_dist{

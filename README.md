@@ -94,24 +94,22 @@ It was put into an easy-to-use C++ header-only library curently based on the [bu
 
 ## Usage with build2
 
-`manifest`:
-Add the following entry to the `manifest` file.
+Add the following entry to the `manifest` file with a possible version dependency.
 
-    depends: buddy-memory-allocator
+    depends: buddy-system
 
-`buildfile`:
 Add these entries to your `buildfile`.
 
-    import libs = buddy-memory-allocator%lib{buddy-memory-allocator}
+    import libs = buddy-system%lib{buddy-system}
     exe{your-executable}: {hxx cxx}{**} $libs
 
 ## Example
 
 ```c++
-#include <buddy_memory_allocator/buddy_memory_allocator.hpp>
+#include <buddy_system/buddy_system.hpp>
 int main(){
     // Construct the allocator and reserve 2 GiB to manage.
-    buddy_memory_arena arena{size_t{1} << 31};
+    buddy_system::arena arena{size_t{1} << 31};
     // Allocate actual memory in bytes.
     void* ptr = arena.malloc(123);
     // Free the memory after usage by providing the pointer.
@@ -123,17 +121,17 @@ int main(){
 
 ### Constructor
 ```c++
-    buddy_memory_arena::buddy_memory_arena(size_t s);
+    buddy_system::arena::arena(size_t s);
 ```
 
 ### Bare-Bones Allocation Member Function
 ```c++
-    void* buddy_memory_arena::malloc(size_t size) noexcept;
+    void* buddy_system::arena::malloc(size_t size) noexcept;
 ```
 
 ### Bare-Bones Deallocation Member Function
 ```c++
-    void buddy_memory_arena::free(void* address) noexcept;
+    void buddy_system::arena::free(void* address) noexcept;
 ```
 
 ## Features
