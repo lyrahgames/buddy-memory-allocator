@@ -111,11 +111,11 @@ Add these entries to your `buildfile`.
 #include <buddy_memory_allocator/buddy_memory_allocator.hpp>
 int main(){
     // Construct the allocator and reserve 2 GiB to manage.
-    buddy_memory_allocator allocator{size_t{1} << 31};
+    buddy_memory_arena arena{size_t{1} << 31};
     // Allocate actual memory in bytes.
-    void* ptr = allocator.malloc(123);
+    void* ptr = arena.malloc(123);
     // Free the memory after usage by providing the pointer.
-    allocator.free(ptr);
+    arena.free(ptr);
 }
 ```
 
@@ -123,17 +123,17 @@ int main(){
 
 ### Constructor
 ```c++
-    buddy_memory_allocator::buddy_memory_allocator(size_t s);
+    buddy_memory_arena::buddy_memory_arena(size_t s);
 ```
 
 ### Bare-Bones Allocation Member Function
 ```c++
-    void* buddy_memory_allocator::malloc(size_t size) noexcept;
+    void* buddy_memory_arena::malloc(size_t size) noexcept;
 ```
 
 ### Bare-Bones Deallocation Member Function
 ```c++
-    void buddy_memory_allocator::free(void* address) noexcept;
+    void buddy_memory_arena::free(void* address) noexcept;
 ```
 
 ## Features

@@ -3,3 +3,4 @@ import libs = buddy-memory-allocator%lib{buddy-memory-allocator}
 ./: exe{example}: cxx{example} $libs
 ./: exe{random}: cxx{random} $libs
 ./: exe{new_and_delete}: cxx{new_and_delete} $libs
+./: exe{allocator}: cxx{allocator} $libs
