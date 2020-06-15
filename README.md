@@ -158,3 +158,7 @@ int main(){
 - https://github.com/evanw/buddy-malloc
 - https://github.com/lotabout/buddy-system
 - https://github.com/sdpetrides/BuddyAllocator
+
+## Further Reading
+- https://sourceware.org/glibc/wiki/MallocInternals
+- https://man7.org/linux/man-pages/man2/brk.2.html
