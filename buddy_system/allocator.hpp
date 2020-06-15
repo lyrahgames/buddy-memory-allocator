@@ -5,6 +5,11 @@
 namespace buddy_system {
 
 // The allocator will be used as a handle to the buddy memory arena.
+// Here, only the necessary features are implemented.
+// In nearly all cases this allocator will be used by calling
+// std::allocator_traits with a respective template argument. Therefore all
+// optional features should be accessible through the default implementation of
+// std::allocator_traits.
 template <typename T>
 struct allocator {
   using value_type = T;

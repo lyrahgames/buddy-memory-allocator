@@ -13,6 +13,10 @@
 
 namespace buddy_system {
 
+// The arena is the actual buddy system that is managing memory manually
+// allocated on the heap. It provides bare-bones allocation and deallocation
+// functions and will accessed by an allocator which acts as a handle to the
+// buddy system algorithms.
 class arena {
   struct node {
     node* next{};

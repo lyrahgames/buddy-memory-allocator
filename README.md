@@ -1,4 +1,4 @@
-# Buddy Memory Allocator
+# Buddy Memory System
 
 A simple example implementation of the [buddy memory system](https://en.wikipedia.org/wiki/Buddy_memory_allocation).
 It was put into an easy-to-use C++ header-only library curently based on the [build2](https://build2.org/) build system.
@@ -104,7 +104,7 @@ Add these entries to your `buildfile`.
     exe{your-executable}: {hxx cxx}{**} $libs
 
 ## Example
-
+### Bare-Bones Malloc and Free Example
 ```c++
 #include <buddy_system/buddy_system.hpp>
 int main(){
@@ -114,6 +114,22 @@ int main(){
     void* ptr = arena.malloc(123);
     // Free the memory after usage by providing the pointer.
     arena.free(ptr);
+}
+```
+### C++ Containers with Buddy System Allocator
+```c++
+#include <buddy_system/buddy_system.hpp>
+#include <vector>
+
+using namespace std;
+
+template <typename T>
+using my_vector = vector<T, buddy_system::allocator<T>>;
+
+int main() {
+  buddy_system::arena arena{size_t{1} << 12};  // 4096 B
+  my_vector<int> v{{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16},
+                   arena};
 }
 ```
 
@@ -128,11 +144,23 @@ int main(){
 ```c++
     void* buddy_system::arena::malloc(size_t size) noexcept;
 ```
+This function returns `nullptr` if allocation was not successful.
+Every pointer returned by a successful memory allocation is at least 64-byte aligned.
+
+### Throwing Allocation Member Function
+```c++
+    void* buddy_system::arena::allocate(size_t size);
+```
+This functions throws `std::bad_alloc` if allocation was not successful.
+Otherwise, this function is the same as `buddy_system::arena::malloc`.
 
 ### Bare-Bones Deallocation Member Function
 ```c++
     void buddy_system::arena::free(void* address) noexcept;
+    void buddy_system::arena::deallocate(void* address) noexcept;
 ```
+These functions do the same and do not throw any exception.
+If the given pointer was not allocated before by the system, nothing should happen.
 
 ## Features
 

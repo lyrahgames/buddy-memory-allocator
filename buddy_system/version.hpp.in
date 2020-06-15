@@ -19,15 +19,15 @@
 // 3.0.0-b.2    0000299999999995020
 // 2.2.0-a.1.z  0000200001999990011
 //
-#define PXART_VERSION       $buddy_system.version.project_number$ULL
-#define PXART_VERSION_STR   "$buddy_system.version.project$"
-#define PXART_VERSION_ID    "$buddy_system.version.project_id$"
+#define BUDDY_SYSTEM_VERSION       $buddy_system.version.project_number$ULL
+#define BUDDY_SYSTEM_VERSION_STR   "$buddy_system.version.project$"
+#define BUDDY_SYSTEM_VERSION_ID    "$buddy_system.version.project_id$"
 
-#define PXART_VERSION_MAJOR $buddy_system.version.major$
-#define PXART_VERSION_MINOR $buddy_system.version.minor$
-#define PXART_VERSION_PATCH $buddy_system.version.patch$
+#define BUDDY_SYSTEM_VERSION_MAJOR $buddy_system.version.major$
+#define BUDDY_SYSTEM_VERSION_MINOR $buddy_system.version.minor$
+#define BUDDY_SYSTEM_VERSION_PATCH $buddy_system.version.patch$
 
-#define PXART_PRE_RELEASE   $buddy_system.version.pre_release$
+#define BUDDY_SYSTEM_PRE_RELEASE   $buddy_system.version.pre_release$
 
-#define PXART_SNAPSHOT_SN   $buddy_system.version.snapshot_sn$ULL
-#define PXART_SNAPSHOT_ID   "$buddy_system.version.snapshot_id$"
+#define BUDDY_SYSTEM_SNAPSHOT_SN   $buddy_system.version.snapshot_sn$ULL
+#define BUDDY_SYSTEM_SNAPSHOT_ID   "$buddy_system.version.snapshot_id$"
