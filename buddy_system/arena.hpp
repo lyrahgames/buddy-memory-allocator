@@ -300,6 +300,40 @@ inline std::ostream& operator<<(std::ostream& os, const arena& bs) {
          << (it - bs.base) * sizeof(bs.free_pages[0]) << " (" << it << ")";
     os << '\n';
   }
+  os << '\n';
+
+  // Memory Allocation Scheme
+  const size_t scheme_size_exp = std::min(size_t{6}, bs.max_page_size_exp);
+  auto scheme_size = (size_t{1} << scheme_size_exp) + 1;
+  char scheme[scheme_size];
+  for (size_t i = 0; i < scheme_size - 1; ++i) scheme[i] = '=';
+
+  const auto start_exp = std::max(bs.max_page_size_exp - scheme_size_exp + 1,
+                                  bs.min_page_size_exp);
+
+  for (size_t i = start_exp; i <= bs.max_page_size_exp; ++i) {
+    for (auto it = bs.free_pages[i - bs.min_page_size_exp]; it; it = it->next) {
+      const auto size = size_t{1} << i;
+      const auto index = bs.index_of_node_ptr(it);
+      const auto length = size >> (bs.max_page_size_exp - scheme_size_exp);
+      auto scheme_index = index >> (bs.max_page_size_exp - scheme_size_exp);
+      scheme[scheme_index] = '[';
+      for (size_t j = 1; j < length - 1; ++j) scheme[scheme_index + j] = '-';
+      scheme[scheme_index + length - 1] = ']';
+    }
+  }
+  for (size_t i = bs.min_page_size_exp; i < start_exp; ++i) {
+    for (auto it = bs.free_pages[i - bs.min_page_size_exp]; it; it = it->next) {
+      const auto index = bs.index_of_node_ptr(it);
+      auto scheme_index = index >> (bs.max_page_size_exp - scheme_size_exp);
+      scheme[scheme_index] = '|';
+    }
+  }
+  scheme[scheme_size - 1] = '\0';
+  os << "Memory Layout Scheme of Free Pages: "
+     << "(" << (size_t{1} << (start_exp - 1)) << " B/char)" << '\n'
+     << scheme << '\n';
+
   return os << setfill('-') << setw(80) << '\n' << setfill(' ');
 }
 
