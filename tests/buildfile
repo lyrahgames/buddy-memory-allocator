@@ -4,3 +4,4 @@ import libs = buddy-system%lib{buddy-system}
 ./: exe{random}: cxx{random} $libs
 ./: exe{new_and_delete}: cxx{new_and_delete} $libs
 ./: exe{allocator}: cxx{allocator} $libs
+./: exe{command_line}: cxx{command_line} $libs

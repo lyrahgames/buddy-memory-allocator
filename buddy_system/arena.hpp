@@ -63,8 +63,11 @@ class arena {
   auto index_of_node_ptr(void* ptr) const noexcept {
     return index_of_node_ptr(reinterpret_cast<node*>(ptr));
   }
-  auto node_ptr_of_index(intptr_t index) const noexcept {
+  auto node_ptr_of_index(size_t index) const noexcept {
     return base + index / sizeof(node*);
+  }
+  auto void_ptr_of_index(size_t index) const noexcept {
+    return reinterpret_cast<void*>(node_ptr_of_index(index));
   }
   auto next_size_exp(size_t size) const noexcept {
     return std::max(min_page_size_exp, size_t(log2(size - 1) + 1));
