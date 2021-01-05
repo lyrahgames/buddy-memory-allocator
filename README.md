@@ -76,37 +76,66 @@ It was put into an easy-to-use C++ header-only library curently based on the [bu
 </b>
 
 ## Author
-- Markus Pawellek (markus.pawellek@mailbox.org)
+- Markus Pawellek "lyrahgames" (lyrahgames@mailbox.org)
 
 ## Requirements
-
 - C++17
 - [build2](https://build2.org/) (or some manual work for other build systems)
 - x86 or x86_64 architecture (support for the [`bsr`](https://c9x.me/x86/html/file_module_x86_id_20.html) instruction)
 
-## Supported Platforms
-
+## Tested Platforms
 - Operating System: Linux
 - Compiler: GCC | Clang
 - Build System: [build2](https://build2.org/)
 
-## Installation
-
 ## Usage with build2
+Add this repository to the `repositories.manifest` file of your build2 package.
+
+    :
+    role: prerequisite
+    location: https://github.com/lyrahgames/buddy-system.git
 
 Add the following entry to the `manifest` file with a possible version dependency.
 
-    depends: buddy-system
+    depends: lyrahgames-buddy-system
 
 Add these entries to your `buildfile`.
 
-    import libs = buddy-system%lib{buddy-system}
+    import libs = lyrahgames-buddy-system%lib{lyrahgames-buddy-system}
     exe{your-executable}: {hxx cxx}{**} $libs
+
+
+## Installation
+The standard installation process will only install the header-only library.
+If you are interested in installing examples, benchmarks, or tests, you have to run their installation commands manually.
+
+    bpkg -d build2-packages cc \
+      config.install.root=/usr/local \
+      config.install.sudo=sudo
+
+Get the latest package release and build it.
+
+    bpkg build https://github.com/lyrahgames/buddy-system.git
+
+Install the built package.
+
+    bpkg install lyrahgames-buddy-system
+
+For uninstalling, do the following.
+
+    bpkg uninstall lyrahgames-buddy-system
+
+If your package uses an explicit `depends: lyrahgames-buddy-system` make sure to initialize this dependency as a system dependency when creating a new configuration.
+
+    bdep init -C @build cc config.cxx=g++ "config.cxx.coptions=-O3" -- "?sys:lyrahgames-buddy-system/*"
 
 ## Example
 ### Bare-Bones Malloc and Free Example
 ```c++
-#include <buddy_system/buddy_system.hpp>
+#include <lyrahgames/buddy_system/buddy_system.hpp>
+
+using namespace lyrahgames;
+
 int main(){
     // Construct the allocator and reserve 2 GiB to manage.
     buddy_system::arena arena{size_t{1} << 31};
@@ -118,10 +147,12 @@ int main(){
 ```
 ### C++ Containers with Buddy System Allocator
 ```c++
-#include <buddy_system/buddy_system.hpp>
 #include <vector>
+//
+#include <lyrahgames/buddy_system/buddy_system.hpp>
 
 using namespace std;
+using namespace lyrahgames;
 
 template <typename T>
 using my_vector = vector<T, buddy_system::allocator<T>>;
@@ -137,27 +168,27 @@ int main() {
 
 ### Constructor
 ```c++
-    buddy_system::arena::arena(size_t s);
+    lyrahgames::buddy_system::arena::arena(size_t s);
 ```
 
 ### Bare-Bones Allocation Member Function
 ```c++
-    void* buddy_system::arena::malloc(size_t size) noexcept;
+    void* lyrahgames::buddy_system::arena::malloc(size_t size) noexcept;
 ```
 This function returns `nullptr` if allocation was not successful.
 Every pointer returned by a successful memory allocation is at least 64-byte aligned.
 
 ### Throwing Allocation Member Function
 ```c++
-    void* buddy_system::arena::allocate(size_t size);
+    void* lyrahgames::buddy_system::arena::allocate(size_t size);
 ```
 This functions throws `std::bad_alloc` if allocation was not successful.
 Otherwise, this function is the same as `buddy_system::arena::malloc`.
 
 ### Bare-Bones Deallocation Member Function
 ```c++
-    void buddy_system::arena::free(void* address) noexcept;
-    void buddy_system::arena::deallocate(void* address) noexcept;
+    void lyrahgames::buddy_system::arena::free(void* address) noexcept;
+    void lyrahgames::buddy_system::arena::deallocate(void* address) noexcept;
 ```
 These functions do the same and do not throw any exception.
 If the given pointer was not allocated before by the system, nothing should happen.
