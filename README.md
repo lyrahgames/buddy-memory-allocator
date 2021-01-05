@@ -8,11 +8,10 @@ It was put into an easy-to-use C++ header-only library curently based on the [bu
 ![](https://img.shields.io/github/repo-size/lyrahgames/buddy-memory-allocator.svg?style=for-the-badge)
 ![](https://img.shields.io/github/license/lyrahgames/buddy-memory-allocator.svg?style=for-the-badge&color=blue)
 
-<b>
 <table>
     <tr>
         <td>
-            master
+            <strong>master</strong>
         </td>
         <td>
             <a href="https://github.com/lyrahgames/buddy-memory-allocator">
@@ -52,7 +51,7 @@ It was put into an easy-to-use C++ header-only library curently based on the [bu
     </tr>
     <tr>
         <td>
-            Current
+            <strong>Current</strong>
         </td>
         <td>
             <a href="https://github.com/lyrahgames/buddy-memory-allocator">
@@ -65,15 +64,14 @@ It was put into an easy-to-use C++ header-only library curently based on the [bu
         <td>
             <img src="https://img.shields.io/github/release-pre/lyrahgames/buddy-memory-allocator.svg?label=pre-release&logo=github&logoColor=white">
         </td> -->
-        <!-- <td>
+        <td>
             <img src="https://img.shields.io/github/tag/lyrahgames/buddy-memory-allocator.svg?logo=github&logoColor=white">
         </td>
         <td>
             <img src="https://img.shields.io/github/tag-date/lyrahgames/buddy-memory-allocator.svg?label=latest%20tag&logo=github&logoColor=white">
-        </td> -->
+        </td>
     </tr>
 </table>
-</b>
 
 ## Author
 - Markus Pawellek "lyrahgames" (lyrahgames@mailbox.org)
