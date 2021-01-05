@@ -1,10 +1,12 @@
-#include <buddy_system/buddy_system.hpp>
 #include <iomanip>
 #include <iostream>
 #include <random>
 #include <string>
+//
+#include <lyrahgames/buddy_system/buddy_system.hpp>
 
 using namespace std;
+using namespace lyrahgames;
 
 struct test {
   test() { cout << "Constructor called.\n"; }

@@ -1,8 +1,8 @@
 #pragma once
 
-#include <buddy_system/arena.hpp>
+#include <lyrahgames/buddy_system/arena.hpp>
 
-namespace buddy_system {
+namespace lyrahgames::buddy_system {
 
 // The allocator will be used as a handle to the buddy memory arena.
 // Here, only the necessary features are implemented.
@@ -28,4 +28,4 @@ struct allocator {
   arena& handle;
 };
 
-}  // namespace buddy_system
+}  // namespace lyrahgames::buddy_system

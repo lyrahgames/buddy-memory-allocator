@@ -1,10 +1,12 @@
-#include <buddy_system/buddy_system.hpp>
 #include <iomanip>
 #include <iostream>
 #include <list>
 #include <vector>
+//
+#include <lyrahgames/buddy_system/buddy_system.hpp>
 
 using namespace std;
+using namespace lyrahgames;
 
 template <typename T>
 using my_vector = vector<T, buddy_system::allocator<T>>;

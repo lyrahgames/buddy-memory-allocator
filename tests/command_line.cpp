@@ -1,4 +1,3 @@
-#include <buddy_system/buddy_system.hpp>
 #include <iomanip>
 #include <iostream>
 #include <memory>
@@ -6,8 +5,11 @@
 #include <sstream>
 #include <string>
 #include <unordered_map>
+//
+#include <lyrahgames/buddy_system/buddy_system.hpp>
 
 using namespace std;
+using namespace lyrahgames;
 
 inline void prompt() { cout << "$ >>> " << flush; }
 inline void separate() {

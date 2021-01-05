@@ -1,6 +1,6 @@
 $out_root/
 {
-  include buddy_system/
+  include ./
 }
 
-export $out_root/buddy_system/$import.target
+export $out_root/$import.target

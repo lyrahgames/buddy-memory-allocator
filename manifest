@@ -1,10 +1,17 @@
 : 1
-name: buddy-system
+name: lyrahgames-buddy-system
 version: 0.1.0-a.0.z
+project: lyrahgames
 summary: C++ Library Implementing the Buddy Memory System
 license: MIT ; MIT License
+
+topics: memory allocator
+
 description-file: README.md
 url: https://github.com/lyrahgames/buddy-system
-email: markus.pawellek@mailbox.org
-depends: * build2 >= 0.12.0
-depends: * bpkg >= 0.12.0
+email: lyrahgames@mailbox.org
+
+depends: * build2 >= 0.13.0
+depends: * bpkg >= 0.13.0
+
+requires: c++17

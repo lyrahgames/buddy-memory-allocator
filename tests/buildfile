@@ -1,4 +1,4 @@
-import libs = buddy-system%lib{buddy-system}
+import libs = lyrahgames-buddy-system%lib{lyrahgames-buddy-system}
 
 ./: exe{example}: cxx{example} $libs
 ./: exe{random}: cxx{random} $libs

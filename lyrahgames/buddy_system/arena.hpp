@@ -1,6 +1,5 @@
 #pragma once
 
-#include <buddy_system/utility.hpp>
 #include <cstddef>
 #include <cstdint>
 #include <cstdlib>
@@ -10,8 +9,10 @@
 #include <stdexcept>
 #include <utility>
 #include <vector>
+//
+#include <lyrahgames/buddy_system/utility.hpp>
 
-namespace buddy_system {
+namespace lyrahgames::buddy_system {
 
 // The arena is the actual buddy system that is managing memory manually
 // allocated on the heap. It provides bare-bones allocation and deallocation
@@ -340,4 +341,4 @@ inline std::ostream& operator<<(std::ostream& os, const arena& bs) {
   return os << setfill('-') << setw(80) << '\n' << setfill(' ');
 }
 
-}  // namespace buddy_system
+}  // namespace lyrahgames::buddy_system

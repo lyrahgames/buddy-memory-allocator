@@ -1,8 +1,10 @@
-#include <buddy_system/buddy_system.hpp>
 #include <iomanip>
 #include <iostream>
+//
+#include <lyrahgames/buddy_system/buddy_system.hpp>
 
 using namespace std;
+using namespace lyrahgames;
 
 int main() {
   buddy_system::arena arena{size_t{1} << 10};  // 1 KiB

@@ -3,7 +3,7 @@
 #include <cstddef>
 #include <cstdint>
 
-namespace buddy_system {
+namespace lyrahgames::buddy_system {
 
 inline unsigned next_power_of_2(unsigned size) {
   /* depend on the fact that size < 2^32 */
@@ -42,4 +42,4 @@ inline intptr_t alignment_of_ptr(void* ptr) noexcept {
   return (alignment + 1) >> 1;
 }
 
-}  // namespace buddy_system
+}  // namespace lyrahgames::buddy_system
