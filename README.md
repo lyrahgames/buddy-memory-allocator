@@ -3,10 +3,10 @@
 A simple example implementation of the [buddy memory system](https://en.wikipedia.org/wiki/Buddy_memory_allocation).
 It was put into an easy-to-use C++ header-only library curently based on the [build2](https://build2.org/) build system.
 
-![](https://img.shields.io/github/languages/top/lyrahgames/buddy-memory-allocator.svg?style=for-the-badge)
-![](https://img.shields.io/github/languages/code-size/lyrahgames/buddy-memory-allocator.svg?style=for-the-badge)
-![](https://img.shields.io/github/repo-size/lyrahgames/buddy-memory-allocator.svg?style=for-the-badge)
-![](https://img.shields.io/github/license/lyrahgames/buddy-memory-allocator.svg?style=for-the-badge&color=blue)
+![](https://img.shields.io/github/languages/top/lyrahgames/buddy-system.svg?style=for-the-badge)
+![](https://img.shields.io/github/languages/code-size/lyrahgames/buddy-system.svg?style=for-the-badge)
+![](https://img.shields.io/github/repo-size/lyrahgames/buddy-system.svg?style=for-the-badge)
+![](https://img.shields.io/github/license/lyrahgames/buddy-system.svg?style=for-the-badge&color=blue)
 
 <table>
     <tr>
@@ -14,16 +14,16 @@ It was put into an easy-to-use C++ header-only library curently based on the [bu
             <strong>master</strong>
         </td>
         <td>
-            <a href="https://github.com/lyrahgames/buddy-memory-allocator">
-                <img src="https://img.shields.io/github/last-commit/lyrahgames/buddy-memory-allocator/master.svg?logo=github&logoColor=white">
+            <a href="https://github.com/lyrahgames/buddy-system">
+                <img src="https://img.shields.io/github/last-commit/lyrahgames/buddy-system/master.svg?logo=github&logoColor=white">
             </a>
         </td>    
         <!-- <td>
-            <a href="https://circleci.com/gh/lyrahgames/buddy-memory-allocator/tree/master"><img src="https://circleci.com/gh/lyrahgames/buddy-memory-allocator/tree/master.svg?style=svg"></a>
+            <a href="https://circleci.com/gh/lyrahgames/buddy-system/tree/master"><img src="https://circleci.com/gh/lyrahgames/buddy-system/tree/master.svg?style=svg"></a>
         </td>
         <td>
-            <a href="https://codecov.io/gh/lyrahgames/buddy-memory-allocator">
-              <img src="https://codecov.io/gh/lyrahgames/buddy-memory-allocator/branch/master/graph/badge.svg" />
+            <a href="https://codecov.io/gh/lyrahgames/buddy-system">
+              <img src="https://codecov.io/gh/lyrahgames/buddy-system/branch/master/graph/badge.svg" />
             </a>
         </td> -->
     </tr>
@@ -32,16 +32,16 @@ It was put into an easy-to-use C++ header-only library curently based on the [bu
             develop
         </td>
         <td>
-            <a href="https://github.com/lyrahgames/buddy-memory-allocator/tree/develop">
-                <img src="https://img.shields.io/github/last-commit/lyrahgames/buddy-memory-allocator/develop.svg?logo=github&logoColor=white">
+            <a href="https://github.com/lyrahgames/buddy-system/tree/develop">
+                <img src="https://img.shields.io/github/last-commit/lyrahgames/buddy-system/develop.svg?logo=github&logoColor=white">
             </a>
         </td>    
         <td>
-            <a href="https://circleci.com/gh/lyrahgames/buddy-memory-allocator/tree/develop"><img src="https://circleci.com/gh/lyrahgames/buddy-memory-allocator/tree/develop.svg?style=svg"></a>
+            <a href="https://circleci.com/gh/lyrahgames/buddy-system/tree/develop"><img src="https://circleci.com/gh/lyrahgames/buddy-system/tree/develop.svg?style=svg"></a>
         </td>
         <td>
-            <a href="https://codecov.io/gh/lyrahgames/buddy-memory-allocator">
-              <img src="https://codecov.io/gh/lyrahgames/buddy-memory-allocator/branch/develop/graph/badge.svg" />
+            <a href="https://codecov.io/gh/lyrahgames/buddy-system">
+              <img src="https://codecov.io/gh/lyrahgames/buddy-system/branch/develop/graph/badge.svg" />
             </a>
         </td>
     </tr> -->
@@ -54,21 +54,21 @@ It was put into an easy-to-use C++ header-only library curently based on the [bu
             <strong>Current</strong>
         </td>
         <td>
-            <a href="https://github.com/lyrahgames/buddy-memory-allocator">
-                <img src="https://img.shields.io/github/commit-activity/y/lyrahgames/buddy-memory-allocator.svg?logo=github&logoColor=white">
+            <a href="https://github.com/lyrahgames/buddy-system">
+                <img src="https://img.shields.io/github/commit-activity/y/lyrahgames/buddy-system.svg?logo=github&logoColor=white">
             </a>
         </td>
         <!-- <td>
-            <img src="https://img.shields.io/github/release/lyrahgames/buddy-memory-allocator.svg?logo=github&logoColor=white">
+            <img src="https://img.shields.io/github/release/lyrahgames/buddy-system.svg?logo=github&logoColor=white">
         </td>
         <td>
-            <img src="https://img.shields.io/github/release-pre/lyrahgames/buddy-memory-allocator.svg?label=pre-release&logo=github&logoColor=white">
+            <img src="https://img.shields.io/github/release-pre/lyrahgames/buddy-system.svg?label=pre-release&logo=github&logoColor=white">
         </td> -->
         <td>
-            <img src="https://img.shields.io/github/tag/lyrahgames/buddy-memory-allocator.svg?logo=github&logoColor=white">
+            <img src="https://img.shields.io/github/tag/lyrahgames/buddy-system.svg?logo=github&logoColor=white">
         </td>
         <td>
-            <img src="https://img.shields.io/github/tag-date/lyrahgames/buddy-memory-allocator.svg?label=latest%20tag&logo=github&logoColor=white">
+            <img src="https://img.shields.io/github/tag-date/lyrahgames/buddy-system.svg?label=latest%20tag&logo=github&logoColor=white">
         </td>
     </tr>
 </table>
@@ -104,8 +104,7 @@ Add these entries to your `buildfile`.
 
 
 ## Installation
-The standard installation process will only install the header-only library.
-If you are interested in installing examples, benchmarks, or tests, you have to run their installation commands manually.
+The standard installation process will only install the header-only library with some additional description, library, and package files.
 
     bpkg -d build2-packages cc \
       config.install.root=/usr/local \
