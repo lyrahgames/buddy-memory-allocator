@@ -1,4 +1,4 @@
-./: tests/ doc{README.md} legal{LICENSE} manifest
+./: tests/ examples/ doc{README.md} legal{LICENSE} manifest
 
 ./: lib{lyrahgames-buddy-system}: lyrahgames/buddy_system/hxx{**}
 {
@@ -7,4 +7,5 @@
 hxx{**}: install.subdirs = true
 
 tests/: install = false
+examples/: install = false
 

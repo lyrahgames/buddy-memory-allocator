@@ -127,6 +127,12 @@ If your package uses an explicit `depends: lyrahgames-buddy-system` make sure to
     bdep init -C @build cc config.cxx=g++ "config.cxx.coptions=-O3" -- "?sys:lyrahgames-buddy-system/*"
 
 ## Example
+In the following two basic examples are shown on how to use the memory arena and the memory allocators.
+For more examples, take a look inside the `examples` directory where can you can further find the listed examples.
+- Random Allocation and Deallocation
+- Command-Line Interpreter for Allocations and Deallocations
+- Usage of Custom `new` and `delete` Operators
+
 ### Bare-Bones Malloc and Free Example
 ```c++
 #include <lyrahgames/buddy_system/buddy_system.hpp>
