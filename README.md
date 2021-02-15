@@ -202,6 +202,7 @@ If the given pointer was not allocated before by the system, nothing should happ
 - fast allocation
 - expectation of fast deallocation
 - returned pointers are at least 64-byte aligned
+- thread-safe
 
 ## Background
 
@@ -211,6 +212,7 @@ If the given pointer was not allocated before by the system, nothing should happ
 - allocation sizes will be rounded to the next power of two together with page header
 - every page contains an 8-byte header with its size
 - table of one-directional linked lists stored with the use of the free memory blocks so no other dynamic memory management is needed
+- Threads lock the data structure when allocating or deallocating memory. Therefore allocations and deallocations are serialized.
 
 ## References
 - https://en.wikipedia.org/wiki/Buddy_memory_allocation

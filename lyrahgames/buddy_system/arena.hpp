@@ -3,12 +3,16 @@
 #include <cstddef>
 #include <cstdint>
 #include <cstdlib>
+#include <utility>
+//
 #include <iomanip>
 #include <iostream>
+//
 #include <new>
 #include <stdexcept>
-#include <utility>
 #include <vector>
+//
+#include <mutex>
 //
 #include <lyrahgames/buddy_system/utility.hpp>
 
@@ -86,6 +90,7 @@ class arena {
   node* base{};
   std::vector<node*> free_pages{};
   std::byte* memory{};
+  mutable std::mutex mutex;
 };
 
 arena::arena(size_t s) {
@@ -124,6 +129,9 @@ inline void* arena::malloc(size_t size) noexcept {
   // Check for too large page size.
   if (page_size_exp > max_page_size_exp) return nullptr;
   // Search for a possible split index starting from the given page size.
+  // We have to lock the mutex to not let another thread
+  // alter the list of free pages.
+  std::scoped_lock lock{mutex};
   const int index = page_size_exp - min_page_size_exp;
   for (int split = index; split < free_pages.size(); ++split) {
     if (free_pages[split]) {
@@ -164,11 +172,15 @@ inline bool arena::is_valid(void* ptr) const noexcept {
   // the pages size. Again, we use an unsigned integer for easier bounds
   // testing.
   const auto index = reinterpret_cast<size_t>(page->next);
+  // free_pages.size() does not change. No mutex lock is needed.
   if (index >= free_pages.size()) return false;
   // Address must provide the alignment of its page size.
   if (memory_index & ((size_t{1} << (index + min_page_size_exp)) - size_t{1}))
     return false;
   // Check if the existing page is already a free page.
+  // For this, the mutex has to be locked
+  // so the list cannot be changed by another thread.
+  std::scoped_lock lock{mutex};
   for (auto it = free_pages[index]; it; it = it->next)
     if (it == page) return false;
   return true;
@@ -194,10 +206,14 @@ inline void arena::free(void* address) noexcept {
   if (memory_index & ((size_t{1} << (index + min_page_size_exp)) - size_t{1}))
     return;
   // Check if the existing page is already a free page.
+  // For this, the mutex has to be locked
+  // so the list cannot be changed by another thread.
+  std::scoped_lock lock{mutex};
   for (auto it = free_pages[index]; it; it = it->next)
     if (it == page) return;
 
   // At this point, we know the given address was allocated by the buddy system.
+  // And we already locked the data structure to not be used by other threads.
 
   for (;; ++index) {
     // Construct mask and test numbers to test if two pages are buddies.
@@ -232,6 +248,7 @@ inline void arena::free(void* address) noexcept {
 }
 
 inline size_t arena::available_memory_size() const noexcept {
+  std::scoped_lock lock{mutex};
   size_t result{};
   for (size_t i = 0; i < free_pages.size(); ++i) {
     for (auto it = free_pages[i]; it; it = it->next)
@@ -241,6 +258,7 @@ inline size_t arena::available_memory_size() const noexcept {
 }
 
 inline size_t arena::max_available_page_size() const noexcept {
+  std::scoped_lock lock{mutex};
   for (auto i = free_pages.size(); i > 0; --i)
     if (free_pages[i - 1]) return size_t{1} << (i - 1 + min_page_size_exp);
   return 0;
@@ -295,6 +313,8 @@ inline std::ostream& operator<<(std::ostream& os, const arena& bs) {
      << " B" << '\n'
      << '\n'
      << "free pages lists content:" << '\n';
+
+  std::scoped_lock lock{bs.mutex};
 
   for (int i = bs.max_page_size_exp; i >= bs.min_page_size_exp; --i) {
     os << setw(4) << "2^" << setw(2) << i << " B = " << setw(10) << (1ull << i)
